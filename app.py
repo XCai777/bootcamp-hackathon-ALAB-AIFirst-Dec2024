@@ -66,23 +66,26 @@ def main():
         </style>
     """, unsafe_allow_html=True)
     
-    left_col, right_col = st.columns([1, 1])
+    # Create two columns for the main content
+    form_col, preview_col = st.columns([1, 1])
     
-    with left_col:
-        render_sidebar()  # This contains all the form inputs
+    # Form inputs
+    form_col.markdown("### Resume Information")
+    render_sidebar()  # This contains all the form inputs
     
-    with right_col:
-        # Download button below the preview title
-        if st.button("Download Resume", type="primary"):
-            pdf_file = generate_pdf(st.session_state)
-            st.download_button(
-                label="Download PDF",
-                data=pdf_file,
-                file_name="resume.pdf",
-                mime="application/pdf"
-            )
-        
-        # Render the preview
+    # Preview section
+    preview_col.markdown("### Preview")
+    if preview_col.button("Download Resume", type="primary"):
+        pdf_file = generate_pdf(st.session_state)
+        preview_col.download_button(
+            label="Download PDF",
+            data=pdf_file,
+            file_name="resume.pdf",
+            mime="application/pdf"
+        )
+    
+    # Render the preview
+    with preview_col:
         render_preview()
 
 if __name__ == "__main__":
