@@ -18,4 +18,4 @@ def render_objective():
         experience_data = st.session_state.get("experiences", [])
         generated_objective = ai_assistant.generate_objective(experience_data)
         st.session_state.objective = generated_objective
-        st.experimental_rerun()
+        st.rerun()
