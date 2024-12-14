@@ -81,10 +81,10 @@ def render_personal_info():
         with col3:
             if st.button("Remove", key=f"remove_lang_{i}"):
                 languages.pop(i)
-                st.experimental_rerun()
+                st.rerun()
     
     if st.button("Add Language"):
         languages.append({"language": "", "proficiency": ""})
-        st.experimental_rerun()
+        st.rerun()
     
     st.session_state.languages = languages
