@@ -4,11 +4,14 @@ def render_additional_info():
     """Render the additional information section of the resume form."""
     st.subheader("Additional Information")
     
-    # Languages
-    languages_value = st.session_state.get("languages", "")
-    if not isinstance(languages_value, str):
-        languages_value = str(languages_value) if languages_value is not None else ""
+    # Helper function to safely convert values to string
+    def safe_str_conversion(value):
+        if value is None:
+            return ""
+        return str(value)
     
+    # Languages
+    languages_value = safe_str_conversion(st.session_state.get("languages", ""))
     st.text_area(
         "Languages",
         value=languages_value,
@@ -17,10 +20,7 @@ def render_additional_info():
     )
     
     # Skills
-    skills_value = st.session_state.get("skills", "")
-    if not isinstance(skills_value, str):
-        skills_value = str(skills_value) if skills_value is not None else ""
-    
+    skills_value = safe_str_conversion(st.session_state.get("skills", ""))
     st.text_area(
         "Skills",
         value=skills_value,
@@ -29,10 +29,7 @@ def render_additional_info():
     )
     
     # Certifications
-    cert_value = st.session_state.get("certifications", "")
-    if not isinstance(cert_value, str):
-        cert_value = str(cert_value) if cert_value is not None else ""
-    
+    cert_value = safe_str_conversion(st.session_state.get("certifications", ""))
     st.text_area(
         "Certifications",
         value=cert_value,
@@ -41,10 +38,7 @@ def render_additional_info():
     )
     
     # Interests
-    interests_value = st.session_state.get("interests", "")
-    if not isinstance(interests_value, str):
-        interests_value = str(interests_value) if interests_value is not None else ""
-    
+    interests_value = safe_str_conversion(st.session_state.get("interests", ""))
     st.text_area(
         "Interests",
         value=interests_value,
