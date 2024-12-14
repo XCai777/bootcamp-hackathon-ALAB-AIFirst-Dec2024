@@ -26,10 +26,10 @@ def render_education():
             
             if st.button("Remove Education", key=f"remove_edu_{i}"):
                 education.pop(i)
-                st.experimental_rerun()
+                st.rerun()
     
     if st.button("Add Education"):
         education.append({})
-        st.experimental_rerun()
+        st.rerun()
     
     st.session_state.education = education
