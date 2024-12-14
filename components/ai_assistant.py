@@ -3,7 +3,7 @@ import streamlit as st
 
 class AIAssistant:
     def __init__(self):
-        openai.api_key = st.secrets["OPENAI_API_KEY"]
+        openai.api_key = st.session_state.api_key
     
     def generate_objective(self, experience_data):
         prompt = f"Generate a professional objective based on the following work experience:\n\n{experience_data}"
