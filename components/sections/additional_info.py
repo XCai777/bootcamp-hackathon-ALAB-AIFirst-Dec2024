@@ -4,32 +4,22 @@ def render_additional_info():
     """Render the additional information section of the resume form."""
     st.subheader("Additional Information")
     
-    # Helper function to safely convert values to string
-    def safe_str_conversion(value):
-        if value is None:
-            return ""
-        return str(value)
-    
-    # Languages
-    languages_value = safe_str_conversion(st.session_state.get("languages", ""))
-    st.text_area(
-        "Languages",
-        value=languages_value,
-        key="languages",
-        help="List languages and proficiency levels"
-    )
+    # Languages (should be handled in personal_info.py instead)
+    # This section might be redundant since languages are already handled in personal_info.py
     
     # Skills
-    skills_value = safe_str_conversion(st.session_state.get("skills", ""))
+    skills = st.session_state.get("skills", [])
+    skills_text = "\n".join([f"{skill.get('name', '')}: {skill.get('proficiency', '')}" for skill in skills])
     st.text_area(
         "Skills",
-        value=skills_value,
-        key="skills",
-        help="List your technical and soft skills"
+        value=skills_text,
+        key="skills_display",
+        help="List your technical and soft skills",
+        disabled=True
     )
     
     # Certifications
-    cert_value = safe_str_conversion(st.session_state.get("certifications", ""))
+    cert_value = st.session_state.get("certifications", "")
     st.text_area(
         "Certifications",
         value=cert_value,
@@ -38,10 +28,11 @@ def render_additional_info():
     )
     
     # Interests
-    interests_value = safe_str_conversion(st.session_state.get("interests", ""))
+    interests = st.session_state.get("additional_info", {}).get("interests", [])
+    interests_text = "\n".join(interests) if isinstance(interests, list) else interests
     st.text_area(
         "Interests",
-        value=interests_value,
+        value=interests_text,
         key="interests",
         help="List your relevant interests and hobbies"
     )
