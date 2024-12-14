@@ -72,7 +72,11 @@ def main():
         render_sidebar()  # This contains all the form inputs
     
     with right_col:
-        # Download button below the preview title
+        # Move Resume Settings here, above the download button
+        st.markdown("### Resume Settings")
+        # Add your resume settings components here
+        
+        # Download button 
         if st.button("Download Resume", type="primary"):
             pdf_file = generate_pdf(st.session_state)
             st.download_button(
@@ -82,7 +86,8 @@ def main():
                 mime="application/pdf"
             )
         
-        # Render the preview
+        # Resume Preview title and content
+        st.markdown("### Resume Preview")
         render_preview()
 
 if __name__ == "__main__":
