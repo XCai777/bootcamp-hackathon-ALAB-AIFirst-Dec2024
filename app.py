@@ -54,14 +54,11 @@ def main():
         st.warning("Please enter a valid OpenAI API key in the sidebar to continue.")
         return
     
-    # Modify the CSS to be more specific and add positioning
+    # Modify the CSS to remove scrolling
     st.markdown("""
         <style>
             div[data-testid="column"]:first-child {
-                height: calc(100vh - 100px);
-                overflow-y: auto;
-                position: sticky;
-                top: 0;
+                position: relative;
             }
             .action-buttons {
                 margin-bottom: 20px;
@@ -69,29 +66,21 @@ def main():
         </style>
     """, unsafe_allow_html=True)
     
-    # Remove the manual div wrapping and simplify the column structure
     left_col, right_col = st.columns([1, 1])
     
     with left_col:
         render_sidebar()  # This contains all the form inputs
     
     with right_col:
-        # Action buttons at the top of the preview
-        col1, col2 = st.columns(2)
-        with col1:
-            if st.button("Download Resume", type="primary"):
-                pdf_file = generate_pdf(st.session_state)
-                st.download_button(
-                    label="Download PDF",
-                    data=pdf_file,
-                    file_name="resume.pdf",
-                    mime="application/pdf"
-                )
-        with col2:
-            if st.button("Save", type="secondary"):
-                saved_data = json.dumps(st.session_state.to_dict())
-                st.session_state.saved_data = saved_data
-                st.success("Resume data saved!")
+        # Download button below the preview title
+        if st.button("Download Resume", type="primary"):
+            pdf_file = generate_pdf(st.session_state)
+            st.download_button(
+                label="Download PDF",
+                data=pdf_file,
+                file_name="resume.pdf",
+                mime="application/pdf"
+            )
         
         # Render the preview
         render_preview()
