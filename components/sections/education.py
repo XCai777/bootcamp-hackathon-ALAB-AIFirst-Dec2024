@@ -12,7 +12,7 @@ def render_education():
     
     # Add new education
     st.subheader("Add Education", divider='gray')
-    with st.form(key="education_form"):
+    with st.form(key="add_education_form"):
         school = st.text_input("School/University")
         degree = st.text_input("Degree")
         major = st.text_input("Major")
@@ -21,7 +21,8 @@ def render_education():
         honors = st.text_area("Honors/Awards", height=50)
         coursework = st.text_area("Relevant Coursework", height=50)
         
-        if st.form_submit_button("Add Education"):
+        submitted = st.form_submit_button("Add Education")
+        if submitted:
             if school and degree:  # Only add if required fields are filled
                 new_education = {
                     "school": school,
@@ -56,16 +57,17 @@ def render_education():
                 education_to_delete.append(idx)
                 st.rerun()
             
-            with st.form(key=f"edit_education_{idx}"):
-                school = st.text_input("School/University", value=edu.get('school', ''))
-                degree = st.text_input("Degree", value=edu.get('degree', ''))
-                major = st.text_input("Major", value=edu.get('major', ''))
-                graduation_date = st.date_input("Graduation Date", value=edu.get('graduation_date'))
-                gpa = st.number_input("GPA", value=edu.get('gpa', 0.0), min_value=0.0, max_value=4.0, step=0.1)
-                honors = st.text_area("Honors/Awards", value=edu.get('honors', ''), height=50)
-                coursework = st.text_area("Relevant Coursework", value=edu.get('coursework', ''), height=50)
+            with st.form(key=f"edit_education_form_{idx}"):
+                school = st.text_input("School/University", value=edu.get('school', ''), key=f"school_{idx}")
+                degree = st.text_input("Degree", value=edu.get('degree', ''), key=f"degree_{idx}")
+                major = st.text_input("Major", value=edu.get('major', ''), key=f"major_{idx}")
+                graduation_date = st.date_input("Graduation Date", value=edu.get('graduation_date'), key=f"grad_date_{idx}")
+                gpa = st.number_input("GPA", value=edu.get('gpa', 0.0), min_value=0.0, max_value=4.0, step=0.1, key=f"gpa_{idx}")
+                honors = st.text_area("Honors/Awards", value=edu.get('honors', ''), height=50, key=f"honors_{idx}")
+                coursework = st.text_area("Relevant Coursework", value=edu.get('coursework', ''), height=50, key=f"coursework_{idx}")
                 
-                if st.form_submit_button("Update"):
+                update_submitted = st.form_submit_button("Update")
+                if update_submitted:
                     if school and degree:  # Validate required fields
                         st.session_state.education[idx] = {
                             "school": school,
