@@ -57,46 +57,19 @@ def main():
     # Create two columns for the layout
     left_col, right_col = st.columns([1, 1])
     
-    # Add CSS to make left column scrollable
-    st.markdown("""
-        <style>
-            .scrollable-column {
-                height: calc(100vh - 200px);
-                overflow-y: auto;
-                padding-right: 20px;
-                margin-bottom: 20px;
-            }
-            .action-buttons {
-                margin-bottom: 20px;
-            }
-        </style>
-    """, unsafe_allow_html=True)
-    
     with left_col:
-        # Create a div with scrollable class for the form inputs
-        st.markdown('<div class="scrollable-column">', unsafe_allow_html=True)
         render_sidebar()  # This contains all the form inputs
-        st.markdown('</div>', unsafe_allow_html=True)
     
     with right_col:
-        # Action buttons at the top of the preview
-        st.markdown('<div class="action-buttons">', unsafe_allow_html=True)
-        col1, col2 = st.columns(2)
-        with col1:
-            if st.button("Download Resume", type="primary"):
-                pdf_file = generate_pdf(st.session_state)
-                st.download_button(
-                    label="Download PDF",
-                    data=pdf_file,
-                    file_name="resume.pdf",
-                    mime="application/pdf"
-                )
-        with col2:
-            if st.button("Save", type="secondary"):
-                saved_data = json.dumps(st.session_state.to_dict())
-                st.session_state.saved_data = saved_data
-                st.success("Resume data saved!")
-        st.markdown('</div>', unsafe_allow_html=True)
+        # Download button at the top of the preview
+        if st.button("Download Resume", type="primary"):
+            pdf_file = generate_pdf(st.session_state)
+            st.download_button(
+                label="Download PDF",
+                data=pdf_file,
+                file_name="resume.pdf",
+                mime="application/pdf"
+            )
         
         # Render the preview
         render_preview()
