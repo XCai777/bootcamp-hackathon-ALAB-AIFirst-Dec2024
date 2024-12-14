@@ -24,57 +24,37 @@ def render_preview():
         st.markdown('<div class="resume-preview">', unsafe_allow_html=True)
         
         # Personal Information
-        st.markdown(f"<h1>{st.session_state.name}</h1>", unsafe_allow_html=True)
-        st.markdown(f"{st.session_state.email} | {st.session_state.phone} | {st.session_state.location}")
-        if st.session_state.website:
-            st.markdown(f"Website: {st.session_state.website}")
+        if st.session_state.get('personal_info'):
+            personal_info = st.session_state.personal_info
+            st.markdown(f"# {personal_info.get('name', '')}")
+            st.markdown(f"{personal_info.get('email', '')} | {personal_info.get('phone', '')} | {personal_info.get('location', '')}")
         
-        # Objective
-        if st.session_state.objective:
-            st.markdown("<h2>Objective</h2>", unsafe_allow_html=True)
-            st.markdown(st.session_state.objective)
+        # Professional Summary
+        if st.session_state.get('professional_summary'):
+            st.markdown("## Professional Summary")
+            st.markdown(st.session_state.professional_summary)
         
         # Work Experience
-        if st.session_state.experiences:
-            st.markdown("<h2>Work Experience</h2>", unsafe_allow_html=True)
-            for exp in st.session_state.experiences:
-                st.markdown(f"**{exp['position']}** at {exp['company']}")
-                st.markdown(f"{exp['start_date']} - {exp['end_date']}")
-                st.markdown(exp['description'])
-                st.markdown(f"Technologies: {exp['technologies']}")
-                st.markdown(f"Team Size: {exp['team_size']} | Work Type: {exp['location']}")
-                st.markdown("---")
+        if st.session_state.get('work_experience'):
+            st.markdown("## Work Experience")
+            for experience in st.session_state.work_experience:
+                st.markdown(f"**{experience.get('company', '')}** - {experience.get('position', '')}")
+                st.markdown(f"{experience.get('start_date', '')} - {experience.get('end_date', '')}")
+                st.markdown(experience.get('description', ''))
         
         # Education
-        if st.session_state.education:
-            st.markdown("<h2>Education</h2>", unsafe_allow_html=True)
+        if st.session_state.get('education'):
+            st.markdown("## Education")
             for edu in st.session_state.education:
-                st.markdown(f"**{edu['degree']}** in {edu['major']}")
-                st.markdown(f"{edu['school']} | Graduated: {edu['graduation_date']}")
-                if edu['gpa']:
-                    st.markdown(f"GPA: {edu['gpa']}")
-                if edu['honors']:
-                    st.markdown(f"Honors: {edu['honors']}")
-                if edu['coursework']:
-                    st.markdown(f"Relevant Coursework: {edu['coursework']}")
-                st.markdown("---")
+                st.markdown(f"**{edu.get('school', '')}** - {edu.get('degree', '')}")
+                st.markdown(f"{edu.get('start_date', '')} - {edu.get('end_date', '')}")
+                st.markdown(edu.get('description', ''))
         
         # Projects
-        if st.session_state.projects:
-            st.markdown("<h2>Projects</h2>", unsafe_allow_html=True)
+        if st.session_state.get('projects'):
+            st.markdown("## Projects")
             for project in st.session_state.projects:
-                st.markdown(f"**{project['name']}**")
-                st.markdown(f"{project['start_date']} - {project['end_date']}")
-                st.markdown(project['description'])
-                st.markdown(f"Technologies: {project['technologies']}")
-                if project['url']:
-                    st.markdown(f"URL: {project['url']}")
-                st.markdown("---")
-        
-        # Skills
-        if st.session_state.skills:
-            st.markdown("<h2>Skills</h2>", unsafe_allow_html=True)
-            for skill in st.session_state.skills:
-                st.markdown(f"**{skill['name']}**: {skill['proficiency']}")
+                st.markdown(f"**{project.get('name', '')}**")
+                st.markdown(project.get('description', ''))
         
         st.markdown('</div>', unsafe_allow_html=True)
