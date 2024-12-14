@@ -13,9 +13,16 @@ def render_preview():
             font-size: {st.session_state.font_size}px;
             color: #333;
             line-height: 1.5;
+            padding: 20px;
+            background: white;
+            border-radius: 5px;
         }}
         .resume-preview h1, .resume-preview h2 {{
             color: {st.session_state.theme_color};
+            margin-bottom: 10px;
+        }}
+        .contact-info {{
+            margin-bottom: 20px;
         }}
     </style>
     """, unsafe_allow_html=True)
@@ -24,12 +31,23 @@ def render_preview():
         st.markdown('<div class="resume-preview">', unsafe_allow_html=True)
         
         # Personal Information
-        if st.session_state.get('personal_info'):
-            personal_info = st.session_state.personal_info
-            st.markdown(f"<h1>{personal_info.get('name', '')}</h1>", unsafe_allow_html=True)
-            st.markdown(f"{personal_info.get('email', '')} | {personal_info.get('phone', '')} | {personal_info.get('location', '')}")
-            if personal_info.get('website'):
-                st.markdown(f"Website: {personal_info.get('website', '')}")
+        if 'full_name' in st.session_state:
+            st.markdown(f"<h1>{st.session_state.full_name}</h1>", unsafe_allow_html=True)
+            
+            # Contact information
+            contact_info = []
+            if 'email' in st.session_state:
+                contact_info.append(st.session_state.email)
+            if 'phone' in st.session_state:
+                contact_info.append(st.session_state.phone)
+            if 'location' in st.session_state:
+                contact_info.append(st.session_state.location)
+            
+            if contact_info:
+                st.markdown(f"<div class='contact-info'>{' | '.join(contact_info)}</div>", unsafe_allow_html=True)
+            
+            if 'website_linkedin' in st.session_state and st.session_state.website_linkedin:
+                st.markdown(f"Website/LinkedIn: {st.session_state.website_linkedin}")
         
         # Objective
         if st.session_state.get('professional_summary'):
