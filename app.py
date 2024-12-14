@@ -57,10 +57,29 @@ def main():
     # Create two columns for the layout
     left_col, right_col = st.columns([1, 1])
     
+    # Add CSS to make left column scrollable
+    st.markdown("""
+        <style>
+            .scrollable-column {
+                height: 800px;
+                overflow-y: auto;
+                padding-right: 20px;
+            }
+        </style>
+    """, unsafe_allow_html=True)
+    
     with left_col:
-        # Render the input form
+        # Create a div with scrollable class
+        st.markdown('<div class="scrollable-column">', unsafe_allow_html=True)
+        
+        # Render the input form (excluding resume settings)
         render_sidebar()
         
+        # Close the scrollable div
+        st.markdown('</div>', unsafe_allow_html=True)
+        
+        # Add resume settings at the bottom (outside scrollable area)
+        st.markdown("### Resume Settings")
         # Add download and save buttons
         col1, col2 = st.columns(2)
         with col1:
@@ -80,7 +99,7 @@ def main():
                 st.success("Resume data saved!")
     
     with right_col:
-        # Render the preview
+        # Render the preview (will remain static)
         render_preview()
 
 if __name__ == "__main__":
