@@ -1,0 +1,12 @@
+# requirements.txt
+
+# Core dependencies
+streamlit>=1.25.0
+openai>=0.27.8
+reportlab>=4.0.4
+
+# PDF generation
+python-dateutil>=2.8.2
+
+# Additional utilities
+pillow>=10.0.0  # For image handling
