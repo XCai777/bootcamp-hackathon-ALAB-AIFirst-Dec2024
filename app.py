@@ -61,26 +61,26 @@ def main():
     st.markdown("""
         <style>
             .scrollable-column {
-                height: 800px;
+                height: calc(100vh - 200px);
                 overflow-y: auto;
                 padding-right: 20px;
+                margin-bottom: 20px;
+            }
+            .action-buttons {
+                margin-bottom: 20px;
             }
         </style>
     """, unsafe_allow_html=True)
     
     with left_col:
-        # Create a div with scrollable class
+        # Create a div with scrollable class for the form inputs
         st.markdown('<div class="scrollable-column">', unsafe_allow_html=True)
-        
-        # Render the input form (excluding resume settings)
-        render_sidebar()
-        
-        # Close the scrollable div
+        render_sidebar()  # This contains all the form inputs
         st.markdown('</div>', unsafe_allow_html=True)
-        
-        # Add resume settings at the bottom (outside scrollable area)
-        st.markdown("### Resume Settings")
-        # Add download and save buttons
+    
+    with right_col:
+        # Action buttons at the top of the preview
+        st.markdown('<div class="action-buttons">', unsafe_allow_html=True)
         col1, col2 = st.columns(2)
         with col1:
             if st.button("Download Resume", type="primary"):
@@ -93,13 +93,12 @@ def main():
                 )
         with col2:
             if st.button("Save", type="secondary"):
-                # Save to session state
                 saved_data = json.dumps(st.session_state.to_dict())
                 st.session_state.saved_data = saved_data
                 st.success("Resume data saved!")
-    
-    with right_col:
-        # Render the preview (will remain static)
+        st.markdown('</div>', unsafe_allow_html=True)
+        
+        # Render the preview
         render_preview()
 
 if __name__ == "__main__":
