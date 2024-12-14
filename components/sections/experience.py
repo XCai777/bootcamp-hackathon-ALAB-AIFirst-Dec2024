@@ -1,47 +1,59 @@
 import streamlit as st
+from datetime import datetime
 from components.ai_assistant import AIAssistant
 
 def render_experience():
     """Render work experience section"""
     
-    st.subheader("Work Experience")
+    st.subheader("Experience")
     
-    experiences = st.session_state.get("experiences", [])
+    # Initialize experience list in session state if it doesn't exist
+    if 'experiences' not in st.session_state:
+        st.session_state.experiences = []
     
-    for i, exp in enumerate(experiences):
-        with st.expander(f"Experience {i+1}", expanded=True):
-            col1, col2 = st.columns(2)
+    # Add new experience
+    with st.expander("Add Experience"):
+        with st.form(key="experience_form"):
+            company = st.text_input("Company Name")
+            position = st.text_input("Position")
+            start_date = st.date_input("Start Date")
+            end_date = st.date_input("End Date")
+            description = st.text_area("Description")
             
-            with col1:
-                exp["company"] = st.text_input("Company", value=exp.get("company", ""), key=f"company_{i}")
-                exp["position"] = st.text_input("Position", value=exp.get("position", ""), key=f"position_{i}")
-            
-            with col2:
-                exp["start_date"] = st.date_input("Start Date", value=exp.get("start_date"), key=f"start_date_{i}")
-                exp["end_date"] = st.date_input("End Date", value=exp.get("end_date"), key=f"end_date_{i}")
-            
-            exp["description"] = st.text_area("Description", value=exp.get("description", ""), key=f"description_{i}", height=100)
-            
-            exp["technologies"] = st.text_input("Technologies/Tools Used", value=exp.get("technologies", ""), key=f"technologies_{i}")
-            
-            col1, col2 = st.columns(2)
-            with col1:
-                exp["team_size"] = st.number_input("Team Size", value=exp.get("team_size", 1), min_value=1, key=f"team_size_{i}")
-            with col2:
-                exp["location"] = st.selectbox("Work Type", options=["On-site", "Remote", "Hybrid"], index=0, key=f"location_{i}")
-            
-            if st.button("Remove Experience", key=f"remove_exp_{i}"):
-                experiences.pop(i)
-                st.experimental_rerun()
-            
-            if st.button("Enhance Description", key=f"enhance_desc_{i}"):
-                ai_assistant = AIAssistant()
-                enhanced_description = ai_assistant.enhance_description(exp["description"])
-                exp["description"] = enhanced_description
-                st.experimental_rerun()
+            if st.form_submit_button("Add Experience"):
+                new_experience = {
+                    "company": company,
+                    "position": position,
+                    "start_date": start_date.strftime("%B %Y"),
+                    "end_date": end_date.strftime("%B %Y"),
+                    "description": description
+                }
+                st.session_state.experiences.append(new_experience)
+                st.success("Experience added successfully!")
     
-    if st.button("Add Experience"):
-        experiences.append({})
-        st.experimental_rerun()
-    
-    st.session_state.experiences = experiences
+    # Display and edit existing experiences
+    for idx, experience in enumerate(st.session_state.experiences):
+        with st.expander(f"{experience['position']} at {experience['company']}"):
+            with st.form(key=f"edit_experience_{idx}"):
+                company = st.text_input("Company Name", value=experience['company'])
+                position = st.text_input("Position", value=experience['position'])
+                start_date = st.date_input("Start Date", value=datetime.strptime(experience['start_date'], "%B %Y"))
+                end_date = st.date_input("End Date", value=datetime.strptime(experience['end_date'], "%B %Y"))
+                description = st.text_area("Description", value=experience['description'])
+                
+                col1, col2 = st.columns(2)
+                with col1:
+                    if st.form_submit_button("Update"):
+                        st.session_state.experiences[idx] = {
+                            "company": company,
+                            "position": position,
+                            "start_date": start_date.strftime("%B %Y"),
+                            "end_date": end_date.strftime("%B %Y"),
+                            "description": description
+                        }
+                        st.success("Experience updated successfully!")
+                
+                with col2:
+                    if st.form_submit_button("Delete"):
+                        st.session_state.experiences.pop(idx)
+                        st.success("Experience deleted successfully!")
